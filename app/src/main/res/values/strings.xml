@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">JeremyBui-SharePreferences</string>
+    <string name="enter_some_text">Enter some text</string>
+    <string name="load_random_image">Load Random Image</string>
+
+</resources>
