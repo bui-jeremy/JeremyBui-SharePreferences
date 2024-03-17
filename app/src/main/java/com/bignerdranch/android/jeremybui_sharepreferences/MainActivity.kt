@@ -11,11 +11,11 @@ import kotlin.random.Random
 class MainActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView
     private lateinit var editText: EditText
+    private var lastSelectedImageId: Int = -1
     private val prefsName = "AppPrefs"
     private val keyImageId = "image_id"
     private val keyText = "text"
 
-    // Array of drawable IDs
     private val imageIds = arrayOf(
         R.drawable.apple,
         R.drawable.orange,
@@ -34,13 +34,8 @@ class MainActivity : AppCompatActivity() {
 
         button.setOnClickListener {
             val randomIndex = Random.nextInt(imageIds.size)
-            val selectedImageId = imageIds[randomIndex]
-            imageView.setImageResource(selectedImageId)
-
-            getSharedPreferences(prefsName, MODE_PRIVATE).edit().apply {
-                putInt(keyImageId, selectedImageId)
-                apply()
-            }
+            lastSelectedImageId = imageIds[randomIndex]
+            imageView.setImageResource(lastSelectedImageId)
         }
 
         val prefs: SharedPreferences = getSharedPreferences(prefsName, MODE_PRIVATE)
@@ -48,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         val savedImageId = prefs.getInt(keyImageId, -1)
         if (savedImageId != -1) {
             imageView.setImageResource(savedImageId)
+            lastSelectedImageId = savedImageId
         }
     }
 
@@ -55,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         getSharedPreferences(prefsName, MODE_PRIVATE).edit().apply {
             putString(keyText, editText.text.toString())
+            putInt(keyImageId, lastSelectedImageId)
             apply()
         }
     }
